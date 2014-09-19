@@ -5,7 +5,7 @@ namespace idifiles{
 
   class Object{
   public:
-    virtual Object* evaluate(Environment* env);
+    virtual Object* const evaluate(Environment* env);
     template<typename... ARG>
     virtual Object* call(Environment* env, ARG... args);
     virtual Object* call(Environment* env, Object* args);
