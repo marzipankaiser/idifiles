@@ -11,3 +11,6 @@ idifiles::Cons* idifiles::Cons::list<Object*,ARGS...>
   return new Cons(arg1, list(args...));
 }
 
+void idifiles::Cons::markChildren(int flags){
+  car->mark(flags); cdr->mark(flags);
+}

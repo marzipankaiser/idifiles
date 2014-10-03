@@ -12,7 +12,11 @@ namespace idifiles{
 
     template<typename T, typename ...ARGS> 
     static Cons* list(T arg1, ARGS... args);
+    template<typename ...ARGS> 
+    static Cons* list<Object*,ARGS...>(Object* arg1, ARGS... args);
     static Cons* list();
+
+    virtual void markChildren(int flags);
   };
   
 }
