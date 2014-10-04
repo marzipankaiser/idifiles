@@ -1,9 +1,10 @@
 #include "cons.h"
+#include "cppobject.h"
 
 idifiles::Cons* idifiles::Cons::list(){ return 0; }
 template<typename T, typename... ARGS>
 idifiles::Cons* idifiles::Cons::list(T arg1, ARGS... args){
-  return new Cons(new Object(arg1), list(args...));
+  return new Cons(new CppObject(arg1), list(args...));
 }
 template<typename ...ARGS> 
 idifiles::Cons* idifiles::Cons::list<Object*,ARGS...>
