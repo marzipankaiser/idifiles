@@ -14,6 +14,11 @@ namespace idifiles{
     Object();
     virtual ~Object();
 
+
+    static const int MARK_REFERENCED = 1<<0;
+    static const int MARK_ALIEN_REFERENCED = 1<<1; // to indicate references from out of space
+    static const int MARK_DELETION = 1<<2;
+
     /* Garbage collection */
     void mark(int flags, bool unmark=false);
   protected:
@@ -24,8 +29,8 @@ namespace idifiles{
     static std::list<Object* const> heapObjects;
   public:
 
-  // delete if all mark bits aren't set and
-  // all notmark bits are set
+  // delete if all mark bits aren't set or
+  // any notmark bits are set
     static void deleteUnmarked(int mark, int notmark, float part=1.0);
   };
 

@@ -43,7 +43,7 @@ void idifiles::Object::deleteUnmarked(int mark, int notmark,
   auto it = heapObjects.begin();
   for(int i=0; (i<part_n)&&(it!=heapObjects.end());i++){
     if((mark & (*it)->markValue)==0
-       && ((*it)->markValue & notmark)==notmark)
+       || ((*it)->markValue & notmark)!=0)
        delete *it;
   }
 }
