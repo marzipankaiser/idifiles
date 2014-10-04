@@ -23,7 +23,7 @@ void idifiles::Object::mark(int flags, bool unmark){
     markValue&=(~flags);
   else
     markValue|=flags;
-  if(oldMark!=markValue) markChildren(flags);
+  if(oldMark!=markValue) markChildren(flags, unmark);
 }
 
 void idifiles::Object::markChildren(int flags, bool unmark){}
