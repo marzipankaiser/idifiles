@@ -13,3 +13,5 @@ Symbol* const idifiles::Symbol::intern(std::string name){
     return new Symbol(name);
   }
 }
+
+idifiles::Symbol::~Symbol(){}
