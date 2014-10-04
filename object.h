@@ -15,9 +15,9 @@ namespace idifiles{
     virtual ~Object();
 
     /* Garbage collection */
-    void mark(int flags);
+    void mark(int flags, bool unmark=false);
   protected:
-    virtual void markChildren(int flags);
+    virtual void markChildren(int flags, bool unmark=false);
     int markValue; 
     std::list<Object* const>::iterator& heapPosition;
 

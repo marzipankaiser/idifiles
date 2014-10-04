@@ -15,8 +15,8 @@ namespace idifiles{
     template<typename ...ARGS> 
     static Cons* list<Object*,ARGS...>(Object* arg1, ARGS... args);
     static Cons* list();
-
-    virtual void markChildren(int flags);
+  protected:
+    virtual void markChildren(int flags, boll unmark=false);
   };
   
 }

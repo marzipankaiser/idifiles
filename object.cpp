@@ -17,13 +17,16 @@ idifiles::Object* const idifiles::Object::call
   throw NotFuncallableException(this);
 }
 
-void idifiles::Object::mark(int flags){
+void idifiles::Object::mark(int flags, bool unmark){
   int oldMark=markValue;
-  markValue|=flags;
+  if(unmark)
+    markValue&=(~flags);
+  else
+    markValue|=flags;
   if(oldMark!=markValue) markChildren(flags);
 }
 
-void idifiles::Object::markChildren(int flags){}
+void idifiles::Object::markChildren(int flags, bool unmark){}
 
 idifiles::Object::Object(){
   heapObjects.push_front(this);
