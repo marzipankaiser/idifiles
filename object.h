@@ -23,7 +23,10 @@ namespace idifiles{
 
     static std::list<Object* const> heapObjects;
   public:
-    static void deleteUnmarked(int mark, float part=1.0);
+
+  // delete if all mark bits aren't set and
+  // all notmark bits are set
+    static void deleteUnmarked(int mark, int notmark, float part=1.0);
   };
 
 }

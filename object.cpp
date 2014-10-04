@@ -37,10 +37,13 @@ idifiles::Object::~Object(){
   heapObjects.erase(heapPosition);
 }
 
-void idifiles::Object::deleteUnmarked(int mark, float part){
+void idifiles::Object::deleteUnmarked(int mark, int notmark, 
+				      float part){
   int part_n = int(heapObjects.size()*part);
   auto it = heapObjects.begin();
   for(int i=0; (i<part_n)&&(it!=heapObjects.end());i++){
-    if(!(mark & (*it)->markValue)) delete *it;
+    if((mark & (*it)->markValue)==0
+       && ((*it)->markValue & notmark)==notmark)
+       delete *it;
   }
 }
