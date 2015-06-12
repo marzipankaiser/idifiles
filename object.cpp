@@ -1,49 +1,29 @@
 #include "object.h"
-#include "cons.h"
 
-idifiles::Object* const idifiles::Object::evaluate
-(idifiles::Environment* env){
-  return this;
+using namespace idifiles;
+using namespace std;
+
+std::unordered_map
+<std::type_index,
+ std::unordered_map
+ <std::type_index,
+  std::function<object*(object*)> > > object::conversion_fns;
+
+void object::def_conversion(type_index from, type_index to,
+			    function<object*(object*)> fn){
+  conversion_fns[from][to] = fn;
+}
+template<typename T> T object::as(){
+  return dynamic_cast<T>(convert_to(typeid(T))->raw_data());
 }
 
-template<typename... ARG>
-idifiles::Object* const idifiles::Object::call
-(idifiles::Environment* env, ARG... args){
-  call(env, Cons::list(args...));
+object* object::convert_to(std::type_index to){
+  return conversion_fns[type()][to](this);
 }
 
-idifiles::Object* const idifiles::Object::call
-(idifiles::Environment* env, Object* args){
-  throw NotFuncallableException(this);
-}
 
-void idifiles::Object::mark(int flags, bool unmark){
-  int oldMark=markValue;
-  if(unmark)
-    markValue&=(~flags);
-  else
-    markValue|=flags;
-  if(oldMark!=markValue) markChildren(flags, unmark);
-}
+void object::run_gc(){
 
-void idifiles::Object::markChildren(int flags, bool unmark){}
-
-idifiles::Object::Object(){
-  heapObjects.push_front(this);
-  heapPosition = heapObjects.front();
-}
-
-idifiles::Object::~Object(){
-  heapObjects.erase(heapPosition);
-}
-
-void idifiles::Object::deleteUnmarked(int mark, int notmark, 
-				      float part){
-  int part_n = int(heapObjects.size()*part);
-  auto it = heapObjects.begin();
-  for(int i=0; (i<part_n)&&(it!=heapObjects.end());i++){
-    if((mark & (*it)->markValue)==0
-       || ((*it)->markValue & notmark)!=0)
-       delete *it;
-  }
+  ///TODO
+  
 }

@@ -1,22 +1,17 @@
-#ifndef SYMBOL_H
-#define SYMBOL_H
-#include "object.h"
-#include <string>
-#include <unordered_map>
+#ifndef IDIFILES_SYMBOL_H
+#define IDIFILES_SYMBOL_H
 
-namespace idifiles{
+namespace idifiles
+{
 
-  class Symbol : public Object{
-    const std::string name;
-    static std::unordered_map<std::string, Symbol* const> symboltable;
+  struct symbol
+  {
+    String name;
+    module* module;
 
-    Symbol(std::string name, bool intern=true);
-  public:
-    static Symbol* const intern(std::string name);
-    static Symbol* const makeUninternedSymbol(std::string name);
-    virtual ~Symbol();
+    symbol(String name, module* module);
   };
-
+  
 }
 
 #endif

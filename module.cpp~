@@ -1,0 +1,14 @@
+#include "module.h"
+
+using namespace idifiles;
+using namespace std;
+
+void module::import(symbol* s){
+  symboltable[s->name()] = s;
+}
+void module::import(module& m){
+  m.map_symbols([this, &m](symbol* s){
+      if(m.symbol_exported(s))
+	import(s);
+    });
+}

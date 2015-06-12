@@ -1,39 +1,42 @@
-#ifndef IDIFILES__OBJECT_H
-#define IDIFILES__OBJECT_H
-#include <list>
+#ifndef IDIFILES_OBJECT_H
+#define IDIFILES_OBJECT_H
+
+#include <unordered_map>
+#include <typeindex>
+#include <functional>
 
 namespace idifiles{
 
-  class Object{
-  public:
-    virtual Object* const evaluate(Environment* env);
-    template<typename... ARG>
-    virtual Object* call(Environment* env, ARG... args);
-    virtual Object* call(Environment* env, Object* args);
+  class object{
 
-    Object();
-    virtual ~Object();
+    static
+    std::unordered_map
+    <std::type_index,
+     std::unordered_map
+     <std::type_index,
+      std::function<object*(object*)> > > conversion_fns;
 
-
-    static const int MARK_REFERENCED = 1<<0;
-    static const int MARK_ALIEN_REFERENCED = 1<<1; // to indicate references from out of space
-    static const int MARK_DELETION = 1<<2;
-
-    /* Garbage collection */
-    void mark(int flags, bool unmark=false);
+    uint_fast8_t mark;
   protected:
-    virtual void markChildren(int flags, bool unmark=false);
-    int markValue; 
-    std::list<Object* const>::iterator& heapPosition;
+    virtual void* raw_data()=0;
 
-    static std::list<Object* const> heapObjects;
+    // map over child ptrs.
+    virtual void map_ptrs(std::function<void(object*)> fn)=0;
+
+    
   public:
-
-  // delete if all mark bits aren't set or
-  // any notmark bits are set
-    static void deleteUnmarked(int mark, int notmark, float part=1.0);
+    static void def_conversion(std::type_index from,
+			       std::type_index to,
+			       std::function<object*(object*)> fn);
+    static void run_gc();
+    object* convert_to(std::type_index type);
+    
+    virtual std::type_index type()=0;
+    
+    template<typename T> T as();
   };
 
+  
 }
 
 #endif

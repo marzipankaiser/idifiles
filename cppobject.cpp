@@ -1,17 +1,13 @@
 #include "cppobject.h"
 
+using namespace idifiles;
+using namespace std;
+
 template<typename T>
-idifiles::CppObject<T>::CppObject(T value){
-  this->value=value;
+type_index cpp_object<T>::type(){
+  return typeid(T);
 }
-
 template<typename T>
-idifiles::CppObject<T>::~CppObject(){}
-
-template<typename T>
-idifiles::CppObject<T>::get(){ return value; }
-
-template<typename T>
-idifiles::CppObject<T>::get(CppObject<T>* obj){
-  return obj->value;
+void* cpp_object<T>::raw_data(){
+  return data;
 }
