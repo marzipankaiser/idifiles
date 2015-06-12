@@ -25,7 +25,7 @@ namespace idifiles{
 
     void map_symbols(std::function<void(symbol*)> fn);
 
-    symbol intern(String name);
+    symbol* intern(String name);
     
   };
   
