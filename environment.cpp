@@ -25,3 +25,12 @@ void environment::set(symbol* s, object* v){
 void environment::bind(symbol* s, object* v){
   local_bindings[s] = v;
 }
+
+
+void environment::map_ptrs(std::function<void(object*)> fn){
+  fn(parent);
+  for(auto it=local_bindings.begin();it!=local_bindings.end();++it)
+    fn(it->second);
+}
+void* environment::raw_data(){ return this; }
+std::type_index environment::type(){ return typeid(environment); }

@@ -2,12 +2,14 @@
 #define IDIFILES_ENVIRONMENT_H
 
 #include <map>
+#include <typeindex>
+#include <functional>
 #include "symbol.h"
 #include "object.h"
 
 namespace idifiles{
 
-  class environment{
+  class environment : public object{
 
     environment* parent;
     std::map<symbol*, object*> local_bindings;
@@ -18,6 +20,12 @@ namespace idifiles{
     void set(symbol* s, object* v);
     void bind(symbol* s, object* v);
     
+  protected:
+    virtual void map_ptrs(std::function<void(object*)> fn);
+  public:
+    virtual void* raw_data();
+    virtual std::type_index type();
+
   };
   
 }

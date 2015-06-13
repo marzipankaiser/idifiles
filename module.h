@@ -8,15 +8,14 @@
 
 namespace idifiles{
 
-  class module{
+  class module : public object{
 
     struct symbol_info{
       bool exported;
     };
 
-    std::unordered_map<String, symbol> symboltable;
+    std::unordered_map<String, symbol*> symboltable;
     std::unordered_map<symbol*, symbol_info> symbol_infos;
-
   public:
     void import(symbol* s);
     void import(module& m);
@@ -26,7 +25,14 @@ namespace idifiles{
     void map_symbols(std::function<void(symbol*)> fn);
 
     symbol* intern(String name);
+
     
+  protected:
+    virtual void map_ptrs(std::function<void(object*)> fn);
+  public:
+    virtual void* raw_data();
+    virtual std::type_index type();
+
   };
   
 }

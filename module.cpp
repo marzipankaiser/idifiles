@@ -28,3 +28,9 @@ symbol* module::intern(String name){
     return symboltable[name];
   }
 }
+
+void module::map_ptrs(std::function<void(object*)> fn){
+  map_symbols(fn);
+}
+void* module::raw_data(){ return this; }
+std::type_index type(){ return typeid(module); }
