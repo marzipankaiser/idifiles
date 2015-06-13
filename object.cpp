@@ -41,7 +41,7 @@ object::object(){
 
 
 // simple stop-the-world, mark-and-sweep gc
-void object::run_gc(object* root_ptr){
+void object::run_gc(std::initializer_list<object*> root_ptrs){
   static uint_fast8_t new_mark=2;
   new_mark = (last_mark==2)?1:2;
 
@@ -51,9 +51,11 @@ void object::run_gc(object* root_ptr){
     o->mark=new_mark;
     o->map_ptrs(mark_fn);
   }
-  mark_fn(root_ptr);
+  for(auto root_ptr : root_ptrs)
+    mark_fn(root_ptr);
 
   // walk memory, delete unreachable
+  object* root_ptr = *(root_ptrs.begin()); // use first root ptr
   object* current_ptr = root_ptr;
   do{
     if(current_ptr->mark!=new_mark){

@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <functional>
+#include <initializer_list>
 
 namespace idifiles{
 
@@ -31,7 +32,7 @@ namespace idifiles{
     static void def_conversion(std::type_index from,
 			       std::type_index to,
 			       std::function<object*(object*)> fn);
-    static void run_gc(object* root_ptr);
+    static void run_gc(std::initializer_list<object*> root_ptrs);
     object* convert_to(std::type_index type);
     
     virtual std::type_index type()=0;
