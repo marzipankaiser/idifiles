@@ -8,6 +8,8 @@
 
 namespace idifiles{
 
+  const uint_fast8_t GC_MARK_DO_NOT_TOUCH;
+
   class object{
 
     static
@@ -25,7 +27,6 @@ namespace idifiles{
 
     // map over child ptrs.
     virtual void map_ptrs(std::function<void(object*)> fn)=0;
-
     
   public:
     object();
@@ -33,6 +34,10 @@ namespace idifiles{
 			       std::type_index to,
 			       std::function<object*(object*)> fn);
     static void run_gc(std::initializer_list<object*> root_ptrs);
+    void mark_lock();
+    void mark_free();
+
+    
     object* convert_to(std::type_index type);
     
     virtual std::type_index type()=0;
@@ -40,6 +45,8 @@ namespace idifiles{
     template<typename T> T as();
 
     virtual object* funcall(object* arg);
+
+    virtual ~object();
   };
 
   

@@ -3,6 +3,7 @@
 using namespace idifiles;
 using namespace std;
 
+const uint_fast8_t GC_MARK_DO_NOT_TOUCH=3;
 std::unordered_map
 <std::type_index,
  std::unordered_map
@@ -58,15 +59,10 @@ void object::run_gc(std::initializer_list<object*> root_ptrs){
   object* root_ptr = *(root_ptrs.begin()); // use first root ptr
   object* current_ptr = root_ptr;
   do{
-    if(current_ptr->mark!=new_mark){
-      current_ptr->prev_in_memory->next_in_memory
-	= current_ptr->next_in_memory;
-      current_ptr->next_in_memory->prev_in_memory
-	= current_ptr->prev_in_memory;
+    if(current_ptr->mark!=new_mark
+       && current_ptr->mark!=GC_MARK_DO_NOT_TOUCH){
       object* to_delete = current_ptr;
       current_ptr = to_delete->next_in_memory;
-      to_delete->next_in_memory = 0;
-      to_delete->prev_in_memory = 0;
       delete to_delete;
     }else{
       current_ptr = current_ptr->next_in_memory;
@@ -75,4 +71,12 @@ void object::run_gc(std::initializer_list<object*> root_ptrs){
   
   some_object = current_ptr;
   
+}
+void object::mark_lock(){ mark=GC_MARK_DO_NOT_TOUCH; }
+void object::mark_free(){ mark=0; }
+
+object::~object(){
+  //update memory pointers
+  prev_in_memory->next_in_memory = next_in_memory;
+  next_in_memory->prev_in_memory = prev_in_memory;
 }
