@@ -14,6 +14,19 @@ object* object::some_object = 0;
 void object::def_conversion(type_index from, type_index to,
 			    function<object*(object*)> fn){
   conversion_fns[from][to] = fn;
+  for(auto&& to2 : conversion_fns[to]){
+    if(!conversion_fns[from].count(to2))
+      conversion_fns[from][to2] = [&fn,&to2](object* o){
+	return fn(o)->convert_to(to2);
+      }
+  }
+  for(auto& from_map : conversion_fns){
+    if(from_map.count(from) && !from_map.count(to)){
+      from_map[to] = [&fn,&from](object* o){
+	return fn(o->convert_to(from));
+      }
+    }
+  }
 }
 template<typename T> T object::as(){
   return dynamic_cast<T>(convert_to(typeid(T))->raw_data());
