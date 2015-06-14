@@ -2,9 +2,11 @@
 #define IDIFILES_OBJECT_H
 
 #include <unordered_map>
+#include <unordered_set>
 #include <typeindex>
 #include <functional>
 #include <initializer_list>
+#include <vector>
 
 namespace idifiles{
 
@@ -19,7 +21,8 @@ namespace idifiles{
      <std::type_index,
       std::function<object*(object*)> > > conversion_fns;
     static object* some_object;
-
+    static std::unordered_set<object*> root_ptrs;
+    
     uint_fast8_t mark;
     object *next_in_memory, *prev_in_memory;
   protected:
@@ -33,7 +36,7 @@ namespace idifiles{
     static void def_conversion(std::type_index from,
 			       std::type_index to,
 			       std::function<object*(object*)> fn);
-    static void run_gc(std::initializer_list<object*> root_ptrs);
+    static void run_gc();
     void mark_lock();
     void mark_free();
 
@@ -44,7 +47,7 @@ namespace idifiles{
     
     template<typename T> T as();
 
-    virtual object* funcall(object* arg);
+    virtual object* funcall(std::vector<object*> arg);
 
     virtual ~object();
   };

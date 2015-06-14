@@ -23,7 +23,7 @@ object* object::convert_to(std::type_index to){
   return conversion_fns[type()][to](this);
 }
 
-object* object::funcall(object* arg){
+object* object::funcall(std::vector<object*> arg){
   //TODO: throw exception
 }
 
@@ -42,14 +42,15 @@ object::object(){
 
 
 // simple stop-the-world, mark-and-sweep gc
-void object::run_gc(std::initializer_list<object*> root_ptrs){
+void object::run_gc(){
   static uint_fast8_t new_mark=2;
   new_mark = (last_mark==2)?1:2;
 
   // mark reachable
   auto mark_fn = [&mark_fn](object* o){
     if(o->mark==new_mark) return;
-    o->mark=new_mark;
+    if(o->mark!=GC_MARK_DO_NOT_TOUCH)
+      o->mark=new_mark;
     o->map_ptrs(mark_fn);
   }
   for(auto root_ptr : root_ptrs)
@@ -72,8 +73,14 @@ void object::run_gc(std::initializer_list<object*> root_ptrs){
   some_object = current_ptr;
   
 }
-void object::mark_lock(){ mark=GC_MARK_DO_NOT_TOUCH; }
-void object::mark_free(){ mark=0; }
+void object::mark_lock(){
+  root_ptrs.insert(this);
+  mark=GC_MARK_DO_NOT_TOUCH;
+}
+void object::mark_free(){
+  mark=0;
+  root_ptrs.erase(this);
+}
 
 object::~object(){
   //update memory pointers
