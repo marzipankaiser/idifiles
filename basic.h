@@ -5,8 +5,14 @@
 namespace idifiles{
 
   class basic : public module{
-  public:
+  private:
+    static basic* singleton =0;
+
+  protected:
     basic();
+    
+  public:
+    static getSingleton();
   }
   
 }
