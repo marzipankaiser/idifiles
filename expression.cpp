@@ -10,6 +10,3 @@ void Expression::map_ptrs(std::function<void(object*)> fn){
   }
 }
 
-object* Expression::funcall(std::vector<object*> arg){
-  //TODO
-}

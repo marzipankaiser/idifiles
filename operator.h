@@ -8,7 +8,7 @@ namespace idifiles{
   protected:
     void map_ptrs(std::function<void(object*)> fn);
   public:
-    object* funcall(std::vector<object*> arg);
+    virtual object* funcall(std::map<symbol*, object*> arg)=0;
   };
   
 }

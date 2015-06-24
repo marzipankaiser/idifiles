@@ -8,6 +8,8 @@
 #include <initializer_list>
 #include <vector>
 
+class context;
+
 namespace idifiles{
 
   const uint_fast8_t GC_MARK_DO_NOT_TOUCH;
@@ -47,7 +49,8 @@ namespace idifiles{
     
     template<typename T> T as();
 
-    virtual object* funcall(std::vector<object*> arg);
+    virtual object* funcall(std::map<symbol*, object*> arg);
+    virtual object* eval(context* c);
 
     virtual ~object();
   };

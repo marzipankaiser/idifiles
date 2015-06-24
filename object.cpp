@@ -36,7 +36,7 @@ object* object::convert_to(std::type_index to){
   return conversion_fns[type()][to](this);
 }
 
-object* object::funcall(std::vector<object*> arg){
+object* object::funcall(std::map<symbol*, object*> arg){
   //TODO: throw exception
 }
 

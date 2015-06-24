@@ -13,8 +13,6 @@ namespace idifiles{
   public:
     Operator* op;
     std::map<symbol*, object*> args;
-
-    object* funcall(std::vector<object*> arg);
   };
   
 }
