@@ -14,8 +14,6 @@ namespace idifiles
     String name;
     module* module;
 
-    object* global_value;
-
     symbol(String name, module* module);
 
   protected:

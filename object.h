@@ -26,7 +26,7 @@ namespace idifiles{
     uint_fast8_t mark;
     object *next_in_memory, *prev_in_memory;
   protected:
-    virtual void* raw_data()=0;
+    virtual void* raw_data();
 
     // map over child ptrs.
     virtual void map_ptrs(std::function<void(object*)> fn)=0;
@@ -43,7 +43,7 @@ namespace idifiles{
     
     object* convert_to(std::type_index type);
     
-    virtual std::type_index type()=0;
+    virtual std::type_index type();
     
     template<typename T> T as();
 

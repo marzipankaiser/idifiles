@@ -100,3 +100,8 @@ object::~object(){
   prev_in_memory->next_in_memory = next_in_memory;
   next_in_memory->prev_in_memory = prev_in_memory;
 }
+
+void* object::raw_data(){ return this; }
+std::type_index object::type(){
+  return typeid(*this);
+}

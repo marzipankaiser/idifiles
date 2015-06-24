@@ -12,6 +12,7 @@ namespace idifiles{
 
     struct symbol_info{
       bool exported;
+      object* global_value;
     };
 
     std::unordered_map<String, symbol*> symboltable;
