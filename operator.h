@@ -1,3 +1,4 @@
+
 #ifndef IDIFILES_OPERATOR_H
 #define IDIFILES_OPERATOR_H
 #include "object.h"
